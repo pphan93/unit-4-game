@@ -1,0 +1,47 @@
+
+.square-button {
+    width: 198px;
+    height: 198px;
+    float: left;
+    position: relative;
+    background-color: white;
+    cursor: pointer;
+
+  }
+
+  .neutral {
+    border: 2px solid blue;
+  }
+
+  .selected {
+    border: 2px solid green;
+  }
+
+  .enemies {
+    border: 2px solid red;
+  }
+
+  .defender {
+    border: 2px solid yellow;
+  }
+
+  .small-img {
+    max-width: 128px;
+    max-height: 128px;
+  }
+  
+  .button-text {
+    position: absolute;
+    bottom: 5%;
+    width: 100%;
+    left: 0%;
+  }
+
+  .top-text {
+    position: absolute;
+    top: 5%;
+    width: 100%;
+    left: 0%;
+  }
+  
+  
