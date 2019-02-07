@@ -1,8 +1,8 @@
 var characters = [
-    "alien",
-    "bear",
-    "darth",
-    "pewpew"
+    ["alien",0],
+    ["bear",0],
+    ["darth",0],
+    ["pewpew",0]
 ]
 
 var newButton
@@ -12,52 +12,70 @@ var imgage
 var selected = 0;
 var myCharacter = "";
 var myCharacterHP;
+var myCharacterDmg;
+var myCharacterCurrentDmg = 0;
 var myDefender = "";
+var myDefenderDmg;
 var myDefenderHP;
+var myDefenderTracker = 0;
 
 
-function createCharacters(where,character,selectStatus,charHP) {
-    if (selectStatus === 0) {
-        characterIdentifer = "neutral"
-        onClickCall = "selectCharacter(this)"
-    }
-    else if (selectStatus === 1 ) {
-        characterIdentifer = "selected"
-        onClickCall = "characterSelected(this)"
-    }
-    else if (selectStatus === 2) {
-        characterIdentifer = "enemies"
-        onClickCall = "enemiesSelected(this)"
-        console.log("ene " + character)
-    }
-    else if (selectStatus === 3) {
-        characterIdentifer = "defender"
-        onClickCall = "defenderSelected(this)"
-        console.log("ene " + character)
+function createCharacters(where,currentCharacter,selectStatus) {
+
+    for ( var i = 0; i < characters.length; i++){
+        positionArray = characters[i].indexOf(currentCharacter)
+        if (positionArray > -1 ){
+         charHP = characters[i][1]
+            if (selectStatus === 0) {
+                characterIdentifer = "neutral"
+                onClickCall = "selectCharacter(this)"
+            }
+            else if (selectStatus === 1 ) {
+                characterIdentifer = "selected";
+                //onClickCall = "characterSelected(this)";
+                myCharacter = currentCharacter;
+                myCharacterHP = charHP
+            }
+            else if (selectStatus === 2) {
+                characterIdentifer = "enemies"
+                onClickCall = "enemiesSelected(this)"
+                //console.log("ene " + currentCharacter)
+            }
+            else if (selectStatus === 3) {
+                characterIdentifer = "defender"
+                onClickCall = "defenderSelected(this)"
+                onClickCall = ""
+                //console.log("ene " + currentCharacter)
+                myDefender = currentCharacter;
+                myDefenderHP = charHP
+                console.log("defender " + myDefenderHP + " "+ myDefender)
+            }
+        }
     }
 
 
         newButton = $("<button/>", {
-            "id": character + selectStatus,
+            "id": currentCharacter + selectStatus,
             "class": "square-button" + " " + characterIdentifer,
+            "data-character": currentCharacter,
             onclick: onClickCall
         }).appendTo( "#" + where );
 
         topText = $("<span/>", {
             "class": "top-text",
-            text: "I am a " + character
-        }).appendTo( "#" + character +  selectStatus);
+            text: "I am a " + currentCharacter
+        }).appendTo( "#" + currentCharacter +  selectStatus);
 
         image = $("<img/>", {
             "class": "small-img",
-            src: "./assets/images/" + character + ".png"
-        }).appendTo( "#" + character + selectStatus );
+            src: "./assets/images/" + currentCharacter + ".png"
+        }).appendTo( "#" + currentCharacter + selectStatus );
 
         bottomText = $("<span/>", {
             "class": "button-text characterHP",
             "id": characterIdentifer,
             text: charHP
-        }).appendTo( "#" + character + selectStatus);
+        }).appendTo( "#" + currentCharacter + selectStatus);
 
 }
 
@@ -65,8 +83,12 @@ function loadCharacters() {
 
     for (var i = 0; i < characters.length; i++){
         selected = 0;
-        charHP = 100;
-        createCharacters("selectCharacter",characters[i],selected, charHP)
+        //charHP = 100;
+        //console.log(characters[])
+        
+        characters[i][1] = randomGen(150,200);
+        //characters[i][2] = randomGen(150,200);
+        createCharacters("selectCharacter",characters[i][0],selected)
     }
 }
 
@@ -79,8 +101,10 @@ function selectCharacter(elem){
         selected = 1;
         var id = $(elem).attr("id");
         id = id.replace(/[0-9]/g, '');
-        myCharacter = id;
+        //myCharacter = id;
+        //myCharacterHP = $(elem).text();
         //alert(id);
+        myCharacterDmg = randomGen(10,50);
         createCharacters("myCharacter",id,selected)
         moveEnemies(id);
 
@@ -91,13 +115,22 @@ function selectCharacter(elem){
 }
 
 
+function randomGen(min,max) {
+    randomnum = Math.floor(Math.random() * (max-min+1)+ min);
+    //console.log(randomnum);
+    return randomnum;
+}
+
+//var testing = initHP();
+//console.log(testing)
+
 function moveEnemies(CharSelected) {
     console.log("move: " + CharSelected)
     for (var i = 0; i < characters.length; i++){
-            if (characters[i] !== CharSelected) {
+            if (characters[i][0] !== CharSelected) {
             console.log(characters[i])
             selected = 2
-            createCharacters("myEnemies",characters[i],selected)
+            createCharacters("myEnemies",characters[i][0],selected)
         }
     }
 
@@ -110,21 +143,41 @@ function clearDiv (divID) {
 
 function enemiesSelected(elem) {
     var id = $(elem).attr("id");
-    clearDiv("#" + id)
-    id = id.replace(/[0-9]/g, '');
-    myDefender = id;
-    moveDefender(myDefender);
+    if ( myDefenderTracker === 0) {
+        clearDiv("#" + id)
+        id = id.replace(/[0-9]/g, '');
+        myDefender = id;
+        moveDefender(myDefender);
+        myDefenderTracker = 1;
+    }   
 }
 
 function moveDefender(defSelected) {
     selected = 3;
-    createCharacters("myDefender", defSelected, selected)
-    console.log (myCharacter + " " + myDefender)
+    myDefenderDmg = randomGen(10,50);
+    createCharacters("myDefender", defSelected, selected);
+    console.log (myCharacter + " " + myDefender);
 }
 
 function attack() {
     if (myCharacter !== "" && myDefender !== "" ) {
-        
+        myCharacterCurrentDmg = (myCharacterCurrentDmg + myCharacterDmg)
+
+        $("#defender").text(myDefenderHP = myDefenderHP - myCharacterCurrentDmg);
+        console.log(myCharacterCurrentDmg)
+        if (myDefenderHP < 0){
+            clearDiv(".defender") 
+            myDefenderTracker = 0;
+        }
+
+        $("#selected").text(myCharacterHP = myCharacterHP - myDefenderDmg);
+        console.log("Def DMG: " + myDefenderDmg)
+        if (myCharacterHP < 0){
+            clearDiv(".selected")
+            alert("you lose")
+            //myDefenderTracker = 0;
+        }
+
     }
 }
 
@@ -140,9 +193,10 @@ $(document).ready(function() {
     //});
 
 
-    $("#bear").on("click", function() {
+    $("#attack").on("click", function() {
+        attack();
         //jelly++;
-        alert("I've been clicked bear! ");
+        //alert("I've been clicked bear! ");
         //newDiv.text("Image testing");
         //newDiv.src ("../../10-CaptainPlanetGame/Unsolved/assets/captain-planet.jpg")
         //$("#image").append('<img id="theImg" src="../../10-CaptainPlanetGame/Unsolved/assets/captain-planet.jpg" />')
