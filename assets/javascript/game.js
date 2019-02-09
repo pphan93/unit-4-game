@@ -1,8 +1,8 @@
 var characters = [
-    ["anakin_left",0],
-    ["dooku_left",0],
-    ["luke_left",0],
-    ["obiwan_left",0]
+    ["anakin",0],
+    ["dooku",0],
+    ["luke",0],
+    ["obiwan",0]
 ]
 
 var newButton
@@ -12,13 +12,16 @@ var imgage
 var selected = 0;
 var myCharacter = "";
 var myCharacterHP;
+var myCharacterOrgHP;
 var myCharacterDmg;
 var myCharacterCurrentDmg = 0;
 var myDefender = "";
 var myDefenderDmg;
 var myDefenderHP;
+var myDefenderOrgHP;
 var myDefenderTracker = 0;
 var enemiesTracker = characters.length - 1;
+var facing;
 
 
 function createCharacters(where,currentCharacter,selectStatus) {
@@ -30,17 +33,24 @@ function createCharacters(where,currentCharacter,selectStatus) {
             if (selectStatus === 0) {
                 characterIdentifer = "neutral"
                 onClickCall = "selectCharacter(this)"
+                buttomCharacters();
             }
             else if (selectStatus === 1 ) {
                 characterIdentifer = "selected";
                 //onClickCall = "characterSelected(this)";
                 myCharacter = currentCharacter;
-                myCharacterHP = charHP
+                myCharacterHP = charHP;
+                facing = "right";
+                $("#myCharName").text(currentCharacter);
+                $("#selected").text(charHP);
+                myCharacterOrgHP = charHP;
+                fighter();
             }
             else if (selectStatus === 2) {
                 characterIdentifer = "enemies"
                 onClickCall = "enemiesSelected(this)"
                 //console.log("ene " + currentCharacter)
+                buttomCharacters();
             }
             else if (selectStatus === 3) {
                 characterIdentifer = "defender"
@@ -49,12 +59,18 @@ function createCharacters(where,currentCharacter,selectStatus) {
                 //console.log("ene " + currentCharacter)
                 myDefender = currentCharacter;
                 myDefenderHP = charHP
+                facing = "left";
+                $("#myDefName").text(currentCharacter);
+                $("#defender").text(charHP);
+                myDefenderOrgHP = charHP;
+                hpReset(".defhealthBarValue")
+                fighter();
                 console.log("defender " + myDefenderHP + " "+ myDefender)
             }
         }
     }
 
-
+    function buttomCharacters() {
         newButton = $("<button/>", {
             "id": currentCharacter + selectStatus,
             "class": "square-button" + " " + characterIdentifer,
@@ -69,7 +85,7 @@ function createCharacters(where,currentCharacter,selectStatus) {
 
         image = $("<img/>", {
             "class": "small-img",
-            src: "./assets/images/" + currentCharacter + ".gif"
+            src: "./assets/images/" + currentCharacter +"_left" + ".gif"
         }).appendTo( "#" + currentCharacter + selectStatus );
 
         bottomText = $("<span/>", {
@@ -77,6 +93,27 @@ function createCharacters(where,currentCharacter,selectStatus) {
             "id": characterIdentifer,
             text: charHP
         }).appendTo( "#" + currentCharacter + selectStatus);
+    }
+
+    function fighter() {
+        newButton = $("<button/>", {
+            "id": currentCharacter + selectStatus,
+            "class": characterIdentifer,
+            "data-character": currentCharacter,
+            onclick: onClickCall
+        }).appendTo( "#" + where );
+
+        topText = $("<span/>", {
+            "class": "top-text",
+            "id" : "dmg" + characterIdentifer,
+            text: ""
+        }).appendTo( "#" + currentCharacter +  selectStatus);
+
+        image = $("<img/>", {
+            "class": "fighter-img",
+            src: "./assets/images/" + currentCharacter + "_"+facing + ".gif"
+        }).appendTo( "#" + currentCharacter + selectStatus );
+    }
 
 }
 
@@ -105,7 +142,7 @@ function selectCharacter(elem){
         //myCharacter = id;
         //myCharacterHP = $(elem).text();
         //alert(id);
-        myCharacterDmg = randomGen(10,50);
+        myCharacterDmg = randomGen(10,20);
         createCharacters("myCharacter",id,selected)
         moveEnemies(id);
 
@@ -164,7 +201,10 @@ function attack() {
     if (myCharacter !== "" && myDefender !== "" && myDefenderTracker != 0 ) {
         myCharacterCurrentDmg = (myCharacterCurrentDmg + myCharacterDmg)
 
-        $("#defender").text(myDefenderHP = myDefenderHP - myCharacterCurrentDmg);
+        myDefenderHP = myDefenderHP - myCharacterCurrentDmg
+        $("#defender").text(myDefenderHP);
+        $("#dmgdefender").text(myCharacterCurrentDmg + " DMG TAKEN");
+        hpReduce(".defhealthBarValue",myDefenderHP,myDefenderOrgHP)
         console.log(myCharacterCurrentDmg)
         if (myDefenderHP < 0 && enemiesTracker > 0){
             clearDiv(".defender")
@@ -177,15 +217,26 @@ function attack() {
         }
 
         if (enemiesTracker > 0 && myDefenderTracker != 0) {
-            $("#selected").text(myCharacterHP = myCharacterHP - myDefenderDmg);
+            myCharacterHP = myCharacterHP - myDefenderDmg
+            $("#dmgselected").text(myDefenderDmg + " DMG TAKEN");
+            hpReduce(".myHealthBarValue",myCharacterHP,myDefenderOrgHP)
+            $("#selected").text(myCharacterHP);
             console.log("Def DMG: " + myDefenderDmg)
-            if (myCharacterHP < 0){
+            if (myCharacterHP <= 0){
                 clearDiv(".selected")
                 alert("you lose")
                 //myDefenderTracker = 0;
             }
         }
     }
+}
+
+function hpReduce (charHPBar,amt,charTotalHP) {
+        $(charHPBar).css('width', ((amt / charTotalHP) * 100) + '%' )
+}
+
+function hpReset (charHPBar) {
+    $(charHPBar).css('width', '100%' )
 }
 
 $(document).ready(function() {

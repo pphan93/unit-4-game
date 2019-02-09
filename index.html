@@ -19,26 +19,26 @@
     <div class="container container-top">
         <row>
             <div class="col-md">
-                <h4 style="float:left">Player 1</h4>
-                <h4 style="float:right">Player 2</h4>
+                <h4 id="myCharName" style="float:left">Player 1</h4>
+                <h4 id="myDefName" style="float:right">Player 2</h4>
                 <br style="clear:both">
-                <div class="healthBarShell" style="float:left">
+                <div class="healthBarShell myDealthBarShell" style="float:left">
 
-                    <div class="healthBarValue"></div>
-                    <p>100</p>
+                    <div class="healthBarValue myHealthBarValue"></div>
+                    <p id="selected"></p>
 
                 </div>
 
 
-                <div class="healthBarShell" style="float:right">
+                <div class="healthBarShell defhealthBarShell" style="float:right">
 
-                    <div class="healthBarValue"></div>
-                    <p>100</p>
+                    <div class="healthBarValue defhealthBarValue"></div>
+                    <p id="defender"></p>
                 </div>
 
                 <br style="clear:both">
 
-                <button class="hit">Hit</button>
+                <button id="attack">ATTACK!</button>
                 <button class="reset">Reset</button>
             </div>
         </row>
@@ -57,8 +57,10 @@
 
     </div>
     <div class="container container-bottom">
+        
         <row>
             <div class="col-md text-center">
+                <h3>Select Player</h3>
                 <div id="selectCharacter">
 
                 </div>
