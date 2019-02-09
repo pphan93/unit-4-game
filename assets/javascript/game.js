@@ -18,6 +18,7 @@ var myDefender = "";
 var myDefenderDmg;
 var myDefenderHP;
 var myDefenderTracker = 0;
+var enemiesTracker = characters.length - 1;
 
 
 function createCharacters(where,currentCharacter,selectStatus) {
@@ -160,24 +161,30 @@ function moveDefender(defSelected) {
 }
 
 function attack() {
-    if (myCharacter !== "" && myDefender !== "" ) {
+    if (myCharacter !== "" && myDefender !== "" && myDefenderTracker != 0 ) {
         myCharacterCurrentDmg = (myCharacterCurrentDmg + myCharacterDmg)
 
         $("#defender").text(myDefenderHP = myDefenderHP - myCharacterCurrentDmg);
         console.log(myCharacterCurrentDmg)
-        if (myDefenderHP < 0){
-            clearDiv(".defender") 
+        if (myDefenderHP < 0 && enemiesTracker > 0){
+            clearDiv(".defender")
+            enemiesTracker = enemiesTracker - 1;
+            console.log("ENE TRACKer:" + enemiesTracker)
             myDefenderTracker = 0;
+            if (enemiesTracker <= 0) {
+                alert("you win")
+            }
         }
 
-        $("#selected").text(myCharacterHP = myCharacterHP - myDefenderDmg);
-        console.log("Def DMG: " + myDefenderDmg)
-        if (myCharacterHP < 0){
-            clearDiv(".selected")
-            alert("you lose")
-            //myDefenderTracker = 0;
+        if (enemiesTracker > 0 && myDefenderTracker != 0) {
+            $("#selected").text(myCharacterHP = myCharacterHP - myDefenderDmg);
+            console.log("Def DMG: " + myDefenderDmg)
+            if (myCharacterHP < 0){
+                clearDiv(".selected")
+                alert("you lose")
+                //myDefenderTracker = 0;
+            }
         }
-
     }
 }
 
