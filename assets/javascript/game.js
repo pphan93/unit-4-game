@@ -1,8 +1,8 @@
 var characters = [
-    ["alien",0],
-    ["bear",0],
-    ["darth",0],
-    ["pewpew",0]
+    ["anakin_left",0],
+    ["dooku_left",0],
+    ["luke_left",0],
+    ["obiwan_left",0]
 ]
 
 var newButton
@@ -69,7 +69,7 @@ function createCharacters(where,currentCharacter,selectStatus) {
 
         image = $("<img/>", {
             "class": "small-img",
-            src: "./assets/images/" + currentCharacter + ".png"
+            src: "./assets/images/" + currentCharacter + ".gif"
         }).appendTo( "#" + currentCharacter + selectStatus );
 
         bottomText = $("<span/>", {
