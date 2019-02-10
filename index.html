@@ -6,75 +6,135 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/starwarsintro.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css" />
+
 
 </head>
 
 <body>
 
-    <div class="container container-top">
-        <row>
-            <div class="col-md">
-                <h4 id="myCharName" style="float:left">Player 1</h4>
-                <h4 id="myDefName" style="float:right">Player 2</h4>
-                <br style="clear:both">
-                <div class="healthBarShell myDealthBarShell" style="float:left">
+    <audio preload="auto" autoplay>
+        <source src="assets/audio/Star_Wars_original_opening.ogg" type="audio/ogg">
+    </audio>
 
-                    <div class="healthBarValue myHealthBarValue"></div>
-                    <p id="selected"></p>
+    <audio id="lightsaber" src="./assets/audio/lightsaber.ogg"></audio>
+
+    <div class="wrapper">
+
+        <!---------------CREDIT IN THE CSS FILE----------------------------------->
+        <div class="star-wars-intro">
+
+            <!-- Blue Intro Text -->
+            <p class="intro-text">
+                A long time ago, in a galaxy far,<br> far away....
+            </p>
+
+            <!-- Logo Image or Text goes in here -->
+            <h2 class="main-logo">
+                <img src="./assets/images/starwar.svg">
+            </h2>
+
+            <!-- All Scrolling Content Goes in here -->
+            <div class="main-content">
+
+                <div class="title-content">
+                    <p class="content-header">Assignment 4<br />PHUOC PHAN</p>
+
+                    <br>
+
+                    <p class="content-body">
+                        * When the game starts, the player will choose a character by clicking on the fighter's picture.
+                        The player will fight as that character for the rest of the game.
+                        <br>
+                        * The player must then defeat all of the remaining fighters. Enemies should be moved to a
+                        different area of the screen.
+                        <br>
+                        * The player chooses an opponent by clicking on an enemy's picture.
+                        <br>
+                        * Once the player selects an opponent, that enemy is moved to a `defender area`.
+                        <br>
+                        * The player will now be able to click the `attack` button.
+                        <br>
+                        * Whenever the player clicks `attack`, their character damages the defender. The opponent will
+                        lose `HP` (health points). These points are displayed at the bottom of the defender's picture.
+                        <br>
+                        * The opponent character will instantly counter the attack. When that happens, the player's
+                        character will lose some of their `HP`. These points are shown at the bottom of the player
+                        character's picture.
+                    </p>
 
                 </div>
-
-
-                <div class="healthBarShell defhealthBarShell" style="float:right">
-
-                    <div class="healthBarValue defhealthBarValue"></div>
-                    <p id="defender"></p>
-                </div>
-
-                <br style="clear:both">
-
-                <button id="attack">ATTACK!</button>
-                <button class="reset">Reset</button>
             </div>
-        </row>
-        <row>
-            <div class="col-md">
-                <div id="myCharacter">
+        </div>
+
+        <!------------------------------------------------------------------------------------------------------------->
+
+        <div class="container container-top">
+            <row>
+                <div class="col-md">
+                    <h3 id="myCharName" style="float:left">Player 1</h3>
+                    <h3 id="myDefName" style="float:right">Player 2</h3>
+                    <br style="clear:both">
+                    <div class="healthBarShell myDealthBarShell" style="float:left">
+
+                        <div class="healthBarValue myHealthBarValue"></div>
+                        <p id="selected"></p>
+
+                    </div>
 
 
+                    <div class="healthBarShell defhealthBarShell" style="float:right">
+
+                        <div class="healthBarValue defhealthBarValue"></div>
+                        <p id="defender"></p>
+                    </div>
+
+                    <br style="clear:both">
+
+                    <button id="attack">ATTACK!</button>
+                    <button id="reset">Reset</button>
                 </div>
+            </row>
+            <row class="fighter">
+                <div class="col-md fighter_location">
+                    <div id="myCharacter">
 
-                <div id="myDefender">
 
+                    </div>
+
+                    <div id="myDefender">
+
+                    </div>
                 </div>
-            </div>
-        </row>
+            </row>
+        </div>
+
+        <div class="container container-bottom">
+
+            <row>
+                <div class="col-md text-center charactersLocation">
+                    <h3>Select Player</h3>
+                    <!--
+                    <div id="selectCharacter">
+
+                    </div>
+
+
+
+                    <div id="myEnemies">
+
+                    </div>
+                    -->
+                </div>
+            </row>
+        </div>
 
     </div>
-    <div class="container container-bottom">
-        
-        <row>
-            <div class="col-md text-center">
-                <h3>Select Player</h3>
-                <div id="selectCharacter">
-
-                </div>
-
-
-
-                <div id="myEnemies">
-
-                </div>
-            </div>
-        </row>
-    </div>
-
-
 
 
 
