@@ -4,12 +4,12 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>Star War RPG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-3.3.1.js"
-        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/starwarsintro.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css" />
 
@@ -18,9 +18,7 @@
 
 <body>
 
-    <audio preload="auto" autoplay>
-        <source src="assets/audio/Star_Wars_original_opening.ogg" type="audio/ogg">
-    </audio>
+    <audio id="backgroundMusic" src="assets/audio/Star_Wars_original_opening.ogg" type="audio/ogg"></audio>
 
     <audio id="lightsaber" src="./assets/audio/lightsaber.ogg"></audio>
 
@@ -48,7 +46,8 @@
                     <br>
 
                     <p class="content-body">
-                        * When the game starts, the player will choose a character by clicking on the fighter's picture.
+                        * When the game starts, the player will choose a character by clicking on the fighter's
+                        picture.
                         The player will fight as that character for the rest of the game.
                         <br>
                         * The player must then defeat all of the remaining fighters. Enemies should be moved to a
@@ -99,6 +98,8 @@
                     <button id="attack">ATTACK!</button>
                     <button id="reset">Reset</button>
                 </div>
+
+                <h4 class="status text-center mt-5"></h4>
             </row>
             <row class="fighter">
                 <div class="col-md fighter_location">
@@ -119,7 +120,7 @@
             <row>
                 <div class="col-md text-center charactersLocation">
                     <h3>Select Player</h3>
-                    <!--
+
                     <div id="selectCharacter">
 
                     </div>
@@ -129,45 +130,12 @@
                     <div id="myEnemies">
 
                     </div>
-                    -->
+
                 </div>
             </row>
         </div>
 
     </div>
-
-
-
-    <!---
-        <div id="selectCharacter">
-
-        </div>
-        <br style="clear: both">
-        <h1>Characted Selected:</h1>
-        <div id="myCharacter">
-
-
-        </div>
-
-        <br style="clear: both">
-
-        <h1>Enemies</h1>
-        <div id="myEnemies">
-
-        </div>
-
-        <br style="clear: both">
-        <button id="attack">ATTACK!</button>
-        <h1>Defender</h1>
-        <div id="myDefender">
-            
-        </div>
-
-
-        -->
-
-
-
     <script src="./assets/javascript/game.js"></script>
 </body>
 

@@ -53,6 +53,15 @@ h3 {
   width: auto;
 }
 
+.status {
+  font-size: 7em;
+  font-family: neon;
+  color: #FFDD1B;
+  font-size: 9vw;
+  line-height: 9vw;
+  text-shadow: 0 0 3vw rgb(255, 217, 0);
+}
+
 .selected, .defender {
   border: none;
 }

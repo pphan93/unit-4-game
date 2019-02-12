@@ -3,39 +3,39 @@ var characters = [
     ["dooku", 0],
     ["luke", 0],
     ["obiwan", 0]
-]
+];
 
-var newButton
-var topText
-var bottomText
-var imgage
-var selected = 0;
-var myCharacter = "";
-var myCharacterHP;
-var myCharacterOrgHP;
-var myCharacterDmg;
-var myCharacterCurrentDmg = 0;
-var myDefender = "";
+var newButton;
+var topText;
+var bottomText;
+var imgage;
+var selected = 0; //indentifer where the characters are located (mycharacter, defenders, enemies, or neutral)
+var myCharacter = ""; //indentify who player character is
+var myCharacterHP; //current hp
+var myCharacterOrgHP; //initial hp - for hp bar (calculate on the percentage for the width (100%)
+var myCharacterDmg; //initial dmg
+var myCharacterCurrentDmg = 0; //current dmg - the damage increase
+var myDefender = ""; //the defender player fighting against
 var myDefenderDmg;
 var myDefenderHP;
 var myDefenderOrgHP;
 var myDefenderTracker = 0;
-var enemiesTracker = characters.length - 1;
-var facing;
+var enemiesTracker = characters.length - 1; //keep track on how many enemies are left see if player win
+var facing; //direction of the character use for image (facing left or right depend on if player select defender)
+var attackCompleted = true; //prevent user from pressing attack/reset button before the animation of attack is completed
 
 
 function createCharacters(where, currentCharacter, selectStatus) {
 
     for (var i = 0; i < characters.length; i++) {
-        positionArray = characters[i].indexOf(currentCharacter)
+        positionArray = characters[i].indexOf(currentCharacter);
         if (positionArray > -1) {
-            charHP = characters[i][1]
+            charHP = characters[i][1];
             if (selectStatus === 0) {
-                characterIdentifer = "neutral"
-                onClickCall = "selectCharacter(this)"
+                characterIdentifer = "neutral";
+                onClickCall = "selectCharacter(this)";
                 buttomCharacters();
-            }
-            else if (selectStatus === 1) {
+            } else if (selectStatus === 1) {
                 characterIdentifer = "selected";
                 myCharacter = currentCharacter;
                 myCharacterHP = charHP;
@@ -44,33 +44,27 @@ function createCharacters(where, currentCharacter, selectStatus) {
                 $("#selected").text(charHP);
                 myCharacterOrgHP = charHP;
                 fighter();
-            }
-            else if (selectStatus === 2) {
-                characterIdentifer = "enemies"
-                onClickCall = "enemiesSelected(this)"
+            } else if (selectStatus === 2) {
+                characterIdentifer = "enemies";
+                onClickCall = "enemiesSelected(this)";
                 buttomCharacters();
-            }
-            else if (selectStatus === 3) {
-                characterIdentifer = "defender"
-                onClickCall = ""
+            } else if (selectStatus === 3) {
+                characterIdentifer = "defender";
+                onClickCall = "";
                 myDefender = currentCharacter;
-                myDefenderHP = charHP
+                myDefenderHP = charHP;
                 facing = "left";
                 $("#myDefName").text(currentCharacter);
                 $("#defender").text(charHP);
                 myDefenderOrgHP = charHP;
-                hpReset(".defhealthBarValue")
+                hpReset(".defhealthBarValue");
                 fighter();
             }
         }
     }
 
+    //For bottom row - "select player"
     function buttomCharacters() {
-
-        newDiv = $("<div />", {
-            "id": where
-        }).appendTo(".charactersLocation");
-
         newButton = $("<button/>", {
             "id": currentCharacter + selectStatus,
             "class": "square-button" + " " + characterIdentifer,
@@ -95,6 +89,7 @@ function createCharacters(where, currentCharacter, selectStatus) {
         }).appendTo("#" + currentCharacter + selectStatus);
     }
 
+    //fighting arena area
     function fighter() {
         newButton = $("<button/>", {
             "id": currentCharacter + selectStatus,
@@ -118,30 +113,21 @@ function createCharacters(where, currentCharacter, selectStatus) {
 }
 
 function loadCharacters() {
-    console.log("loadCharacter")
     for (var i = 0; i < characters.length; i++) {
 
-        selected = 0;
-        //charHP = 100;
-        //console.log(characters[])
-
-        characters[i][1] = randomGen(150, 200);
-        //characters[i][2] = randomGen(150,200);
-        createCharacters("selectCharacter", characters[i][0], selected)
+        selected = 0; //nuetral - no character have been selected
+        characters[i][1] = randomGen(150, 200); //generate random HP for each characters
+        createCharacters("selectCharacter", characters[i][0], selected);
     }
 }
 
 function selectCharacter(elem) {
-    //alert("I've been clicked alien! ");
     if (selected === 0) {
-        selected = 1;
+        selected = 1; //selected character
         var id = $(elem).attr("id");
         id = id.replace(/[0-9]/g, '');
-        //myCharacter = id;
-        //myCharacterHP = $(elem).text();
-        //alert(id);
         myCharacterDmg = randomGen(10, 20);
-        createCharacters("myCharacter", id, selected)
+        createCharacters("myCharacter", id, selected);
         moveEnemies(id);
 
     }
@@ -154,12 +140,10 @@ function randomGen(min, max) {
 }
 
 function moveEnemies(CharSelected) {
-    console.log("move: " + CharSelected)
     for (var i = 0; i < characters.length; i++) {
         if (characters[i][0] !== CharSelected) {
-            console.log(characters[i])
-            selected = 2
-            createCharacters("myEnemies", characters[i][0], selected)
+            selected = 2;
+            createCharacters("myEnemies", characters[i][0], selected);
         }
     }
 
@@ -173,7 +157,7 @@ function clearDiv(divID) {
 function enemiesSelected(elem) {
     var id = $(elem).attr("id");
     if (myDefenderTracker === 0) {
-        clearDiv("#" + id)
+        clearDiv("#" + id);
         id = id.replace(/[0-9]/g, '');
         myDefender = id;
         moveDefender(myDefender);
@@ -185,43 +169,45 @@ function moveDefender(defSelected) {
     selected = 3;
     myDefenderDmg = randomGen(10, 50);
     createCharacters("myDefender", defSelected, selected);
-    console.log(myCharacter + " " + myDefender);
 }
 
 function attack() {
-    if (myCharacter !== "" && myDefender !== "" && myDefenderTracker != 0) {
-
+    if (myCharacter !== "" && myDefender !== "" && myDefenderTracker != 0 && attackCompleted) {
+        attackCompleted = false;
         moveAttacker("myCharacter");
         attackEnemies();
         setTimeout(moveAttackerBack, 1000, "myCharacter");
 
         if (enemiesTracker > 0 && myDefenderTracker != 0) {
             setTimeout(function () {
-                moveAttacker("myDefender")
-                attackPlayer()
+                moveAttacker("myDefender");
+                attackPlayer();
 
             }, 2000);
-            setTimeout(moveAttackerBack, 3000, "myDefender");
+            setTimeout(function () {
+                moveAttackerBack("myDefender");
+                attackCompleted = true;
+            }, 3000);
+
         }
     }
 
 }
 
 function attackEnemies() {
-    myCharacterCurrentDmg = (myCharacterCurrentDmg + myCharacterDmg)
-    myDefenderHP = myDefenderHP - myCharacterCurrentDmg
+    myCharacterCurrentDmg = (myCharacterCurrentDmg + myCharacterDmg);
+    myDefenderHP = myDefenderHP - myCharacterCurrentDmg;
     $("#defender").text(myDefenderHP);
-    lightSaberSound()
+    lightSaberSound();
     $("#dmgdefender").text(myCharacterCurrentDmg + "DMG");
-    hpReduce(".defhealthBarValue", myDefenderHP, myDefenderOrgHP)
-    console.log(myCharacterCurrentDmg)
+    hpReduce(".defhealthBarValue", myDefenderHP, myDefenderOrgHP);
     if (myDefenderHP < 0 && enemiesTracker > 0) {
-        clearDiv(".defender")
+        attackCompleted = true;
+        clearDiv(".defender");
         enemiesTracker = enemiesTracker - 1;
-        console.log("ENE TRACKer:" + enemiesTracker)
         myDefenderTracker = 0;
         if (enemiesTracker <= 0) {
-            alert("you win")
+            outputStatus("YOU WIN");
         }
     }
 
@@ -229,15 +215,14 @@ function attackEnemies() {
 }
 
 function attackPlayer() {
-    myCharacterHP = myCharacterHP - myDefenderDmg
-    lightSaberSound()
+    myCharacterHP = myCharacterHP - myDefenderDmg;
+    lightSaberSound();
     $("#dmgselected").text(myDefenderDmg + "DMG");
-    hpReduce(".myHealthBarValue", myCharacterHP, myDefenderOrgHP)
+    hpReduce(".myHealthBarValue", myCharacterHP, myDefenderOrgHP);
     $("#selected").text(myCharacterHP);
-    console.log("Def DMG: " + myDefenderDmg)
     if (myCharacterHP <= 0) {
-        clearDiv(".selected")
-        alert("you lose")
+        clearDiv(".selected");
+        outputStatus("YOU LOSE");
     }
 
 }
@@ -249,8 +234,7 @@ function moveAttackerBack(who) {
             'right': '',
             'left': '0'
         });
-    }
-    else {
+    } else {
         $('#myDefender').css({
             'right': '20px',
             'left': ''
@@ -262,15 +246,12 @@ function moveAttackerBack(who) {
 }
 
 function moveAttacker(who) {
-    console.log("here");
     if (who == "myCharacter") {
-        console.log("test");
         $('#myCharacter').css({
             'right': '7em',
             'left': 'auto'
         });
-    }
-    else {
+    } else {
         $('#myDefender').css({
             'left': '7em',
             'right': 'auto'
@@ -280,24 +261,38 @@ function moveAttacker(who) {
 }
 
 function resetGame() {
-    selected = 0;
-    myCharacter = "";
-    myCharacterHP = 0;
-    myCharacterOrgHP = 0;
-    myCharacterDmg = 0;
-    myCharacterCurrentDmg = 0;
-    myDefender = "";
-    myDefenderDmg = 0;
-    myDefenderHP = 0;
-    myDefenderOrgHP = 0;
-    myDefenderTracker = 0;
-    enemiesTracker = characters.length - 1;
+    if (attackCompleted) {
+        selected = 0;
+        myCharacter = "";
+        myCharacterHP = 0;
+        myCharacterOrgHP = 0;
+        myCharacterDmg = 0;
+        myCharacterCurrentDmg = 0;
+        myDefender = "";
+        myDefenderDmg = 0;
+        myDefenderHP = 0;
+        myDefenderOrgHP = 0;
+        myDefenderTracker = 0;
+        enemiesTracker = characters.length - 1;
 
-    $("#myCharName").text("Player 1");
-    $("#myDefName").text("Player 1");
-    $("#myCharacter,#myDefender,#selectCharacter,#myEnemies,#selected,#defender").empty();
+        outputStatus("");
 
-    loadCharacters();
+        $("#myCharName").text("Player 1");
+        $("#myDefName").text("Player 2");
+        $("#myCharacter,#myDefender,#selectCharacter,#myEnemies,#selected,#defender").empty();
+        hpReset(".healthBarValue");
+
+
+        $("<div />", {
+            "id": "selectCharacter",
+        }).appendTo(".charactersLocation");
+
+        $("<div />", {
+            "id": "myEnemies",
+        }).appendTo(".charactersLocation");
+
+        loadCharacters();
+    }
 }
 
 
@@ -307,37 +302,46 @@ function resetDMG() {
 }
 
 function lightSaberSound() {
-    var light = $("#lightsaber")
-    $("#lightsaber").get(0).play();
-    light.volume = .5;
+    var light = $("#lightsaber");
+    light.get(0).play();
+    light.prop("volume", 0.1);
 }
 
+function outputStatus(message) {
+    $(".status").text(message);
+}
 
 function hpReduce(charHPBar, amt, charTotalHP) {
-    $(charHPBar).css('width', ((amt / charTotalHP) * 100) + '%')
+    $(charHPBar).css('width', ((amt / charTotalHP) * 100) + '%');
 }
 
 function hpReset(charHPBar) {
-    $(charHPBar).css('width', '100%')
+    $(charHPBar).css('width', '100%');
 }
 
+function playMusic() {
+    $("#backgroundMusic").get(0).play();
+}
+
+
 $(document).ready(function () {
+
+    playMusic();
 
     loadCharacters();
 
     setTimeout(
         function () {
+
             $(".star-wars-intro").css("z-index", "-1");
-        }
-        , 4000
-    )
+        }, 4000
+    );
 
     $("#attack").on("click", function () {
         attack();
     });
 
     $("#reset").on("click", function () {
-        alert("test")
         resetGame();
     });
 
